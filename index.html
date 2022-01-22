@@ -1,5 +1,6 @@
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <style>
       body {
         padding: 30px;
@@ -34,7 +35,7 @@
         display: inline-block;
         height: 50px;
         width: 50px;
-        border: 1px solid black;
+        border: 5px solid white;
       }
 
       [data-color="red"] {
@@ -56,26 +57,44 @@
         background-color: violet;
       }
       .color-box.selected {
-        border: 3px solid black;
+        border: 5px solid black;
       }
 
       .blue {
         color: blue;
       }
+      input.blue {
+        border: 2px solid blue;
+      }
       .violet {
         color: violet;
+      }
+      input.violet {
+        border: 2px solid violet;
       }
       .purple {
         color: purple;
       }
+      input.purple {
+        border: 2px solid purple;
+      }
       .red {
         color: red;
+      }
+      input.red {
+        border: 2px solid red;
       }
       .green {
         color: green;
       }
+      input.green {
+        border: 2px solid green;
+      }
       .orange {
         color: orange;
+      }
+      input.orange {
+        border: 2px solid orange;
       }
       .row {
         display: flex;
@@ -94,7 +113,7 @@
           <span class="color-box" data-color="purple"></span>
         </div>
         <div class="row">
-          <input type="text" id="text" class="red" />
+          <input type="text" id="text" class="red" autocapitalize="off />
           <button id="speak">👄</button>
           <button id="save">⤵️</button>
         </div>
@@ -151,9 +170,11 @@
 
         btnSave.addEventListener("click", () => {
           save();
+          txt.focus();
         });
         btnSpeak.addEventListener("click", () => {
           say(txt.value);
+          txt.focus();
         });
 
         var save = () => {
