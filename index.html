@@ -17,9 +17,16 @@
         font-size: 70px;
         text-transform: uppercase;
         padding: 20px;
+        flex-grow: 1;
+        width: 100%;
       }
       #speak {
-        font-size: 60px;
+        font-size: 40px;
+        margin-left: 20px;
+        padding: 6px 20px;
+      }
+      #save {
+        font-size: 40px;
         margin-left: 20px;
         padding: 6px 20px;
       }
@@ -70,10 +77,8 @@
       .orange {
         color: orange;
       }
-      .center-content {
+      .row {
         display: flex;
-        align-items: center;
-        justify-content: center;
       }
     </style>
   </head>
@@ -88,20 +93,31 @@
           <span class="color-box" data-color="violet"></span>
           <span class="color-box" data-color="purple"></span>
         </div>
-        <input type="text" id="text" class="red" />
-        <button id="speak">SPARA</button> (eller pil ner)
+        <div class="row">
+          <input type="text" id="text" class="red" />
+          <button id="speak">👄</button>
+          <button id="save">⤵️</button>
+        </div>
         <div id="saved"></div>
       </div>
     </div>
     <script>
       window.addEventListener("DOMContentLoaded", () => {
         var synth = window.speechSynthesis;
-        let btn = document.querySelector("#speak");
+        let btnSpeak = document.querySelector("#speak");
+        let btnSave = document.querySelector("#save");
         let txt = document.querySelector("#text");
         let saved = document.querySelector("#saved");
         let words = [];
 
         document.body.addEventListener("click", (event) => {
+          changeColor(event.target);
+        });
+        document.body.addEventListener("touchstart", (event) => {
+          changeColor(event.target);
+        });
+
+        var changeColor = (target) => {
           if (event.target.parentElement.id) {
             say(event.target.textContent);
           }
@@ -113,19 +129,19 @@
             txt.classList = [];
             txt.classList.add(event.target.getAttribute("data-color"));
           }
-        });
+        };
 
         txt.addEventListener("keydown", (e) => {
           if (e.code === "ArrowDown") {
             save();
           }
+          if (e.code === "Enter") {
+            say(txt.value);
+          }
+          console.log(e);
         });
 
         txt.addEventListener("beforeinput", (e) => {
-          console.log(e);
-          if (e.inputType === "insertLineBreak") {
-            say(txt.value);
-          }
           if (e.data != null) {
             say(e.data);
           }
@@ -133,8 +149,11 @@
 
         document.querySelector(".color-box.red", () => {});
 
-        btn.addEventListener("click", () => {
+        btnSave.addEventListener("click", () => {
           save();
+        });
+        btnSpeak.addEventListener("click", () => {
+          say(txt.value);
         });
 
         var save = () => {
