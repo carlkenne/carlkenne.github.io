@@ -1,0 +1,163 @@
+<html>
+  <head>
+    <style>
+      body {
+        padding: 30px;
+      }
+      #saved {
+        font-size: 70px;
+        text-transform: uppercase;
+        font-family: arial;
+        margin-top: 20px;
+      }
+      #saved > * {
+        cursor: pointer;
+      }
+      #text {
+        font-size: 70px;
+        text-transform: uppercase;
+        padding: 20px;
+      }
+      #speak {
+        font-size: 60px;
+        margin-left: 20px;
+        padding: 6px 20px;
+      }
+      .color-box {
+        display: inline-block;
+        height: 50px;
+        width: 50px;
+        border: 1px solid black;
+      }
+
+      [data-color="red"] {
+        background-color: red;
+      }
+      [data-color="blue"] {
+        background-color: blue;
+      }
+      [data-color="green"] {
+        background-color: green;
+      }
+      [data-color="orange"] {
+        background-color: orange;
+      }
+      [data-color="purple"] {
+        background-color: purple;
+      }
+      [data-color="violet"] {
+        background-color: violet;
+      }
+      .color-box.selected {
+        border: 3px solid black;
+      }
+
+      .blue {
+        color: blue;
+      }
+      .violet {
+        color: violet;
+      }
+      .purple {
+        color: purple;
+      }
+      .red {
+        color: red;
+      }
+      .green {
+        color: green;
+      }
+      .orange {
+        color: orange;
+      }
+      .center-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="center-content">
+      <div>
+        <div>
+          <span class="color-box selected" data-color="red"></span>
+          <span class="color-box" data-color="blue"></span>
+          <span class="color-box" data-color="green"></span>
+          <span class="color-box" data-color="orange"></span>
+          <span class="color-box" data-color="violet"></span>
+          <span class="color-box" data-color="purple"></span>
+        </div>
+        <input type="text" id="text" class="red" />
+        <button id="speak">SPARA</button> (eller pil ner)
+        <div id="saved"></div>
+      </div>
+    </div>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        var synth = window.speechSynthesis;
+        let btn = document.querySelector("#speak");
+        let txt = document.querySelector("#text");
+        let saved = document.querySelector("#saved");
+        let words = [];
+
+        document.body.addEventListener("click", (event) => {
+          if (event.target.parentElement.id) {
+            say(event.target.textContent);
+          }
+          if (event.target.classList.contains("color-box")) {
+            document.querySelectorAll(".color-box").forEach((item) => {
+              item.classList.remove("selected");
+            });
+            event.target.classList.add("selected");
+            txt.classList = [];
+            txt.classList.add(event.target.getAttribute("data-color"));
+          }
+        });
+
+        txt.addEventListener("keydown", (e) => {
+          if (e.code === "ArrowDown") {
+            save();
+          }
+        });
+
+        txt.addEventListener("beforeinput", (e) => {
+          console.log(e);
+          if (e.inputType === "insertLineBreak") {
+            say(txt.value);
+          }
+          if (e.data != null) {
+            say(e.data);
+          }
+        });
+
+        document.querySelector(".color-box.red", () => {});
+
+        btn.addEventListener("click", () => {
+          save();
+        });
+
+        var save = () => {
+          words.push({
+            color: document.querySelector(".selected").getAttribute("data-color"),
+            text: txt.value,
+          });
+          saved.innerHTML = "";
+          words.forEach((word) => {
+            saved.innerHTML = "<div class=" + word.color + ">" + word.text + "</div>" + saved.innerHTML;
+          });
+          txt.value = "";
+        };
+
+        var say = (text) => {
+          let u = new SpeechSynthesisUtterance();
+          u.voice = window.speechSynthesis.getVoices().find((v) => v.voiceURI === "Alva");
+          u.lang = "sv - Swedish";
+          u.text = text;
+          speechSynthesis.cancel();
+          speechSynthesis.speak(u);
+        };
+      });
+    </script>
+  </body>
+</html>
