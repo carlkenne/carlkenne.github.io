@@ -171,7 +171,7 @@
         var say = (text) => {
           let u = new SpeechSynthesisUtterance();
           u.voice = window.speechSynthesis.getVoices().find((v) => v.voiceURI === "Alva");
-          u.lang = "sv - Swedish";
+          u.lang = "sv-SE";
           u.text = text;
           speechSynthesis.cancel();
           speechSynthesis.speak(u);
