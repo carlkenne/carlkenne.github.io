@@ -22,14 +22,16 @@
         width: 100%;
       }
       #speak {
-        font-size: 40px;
+        font-size: 80px;
         margin-left: 20px;
         padding: 6px 20px;
+        width: 145px;
       }
       #save {
-        font-size: 40px;
+        font-size: 80px;
         margin-left: 20px;
         padding: 6px 20px;
+        width: 145px;
       }
       .color-box {
         display: inline-block;
@@ -148,6 +150,7 @@
             txt.classList = [];
             txt.classList.add(event.target.getAttribute("data-color"));
           }
+          txt.focus();
         };
 
         txt.addEventListener("keydown", (e) => {
