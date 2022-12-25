@@ -24,13 +24,15 @@
       #speak {
         font-size: 80px;
         margin-left: 20px;
-        padding: 6px 20px;
+        text-align: center;
+        padding: 6px 0 6px 20px;
         width: 145px;
       }
       #save {
         font-size: 80px;
+        text-align: center;
         margin-left: 20px;
-        padding: 6px 20px;
+        padding: 6px 0 6px 20px;
         width: 145px;
       }
       .color-box {
@@ -115,9 +117,9 @@
           <span class="color-box" data-color="purple"></span>
         </div>
         <div class="row">
-          <input type="text" id="text" class="red" autocapitalize="off" />
-          <button id="speak">👄</button>
-          <button id="save">⤵️</button>
+          <input type="text" id="text" class="red" autocapitalize="characters" />
+          <button id="speak">👄&nbsp;</button>
+          <button id="save">⤵️&nbsp;</button>
         </div>
         <div id="saved"></div>
       </div>
