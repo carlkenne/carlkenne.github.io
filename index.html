@@ -4,6 +4,13 @@
     <style>
       body {
         padding: 30px;
+        background: rgb(2, 0, 36);
+        background: linear-gradient(
+          146deg,
+          rgba(2, 0, 36, 1) 0%,
+          rgba(193, 205, 255, 1) 0%,
+          rgba(247, 243, 204, 1) 100%
+        );
       }
       #saved {
         font-size: 70px;
@@ -39,7 +46,8 @@
         display: inline-block;
         height: 50px;
         width: 50px;
-        border: 5px solid white;
+        border: 1px solid white;
+        margin: 4px;
       }
 
       [data-color="red"] {
@@ -62,6 +70,7 @@
       }
       .color-box.selected {
         border: 5px solid black;
+        margin: 0;
       }
 
       .blue {
@@ -118,8 +127,8 @@
         </div>
         <div class="row">
           <input type="text" id="text" class="red" autocapitalize="characters" />
-          <button id="speak">👄</button>
-          <button id="save">⤵️</button>
+          <button id="speak" disabled>👄</button>
+          <button id="save" disabled>⤵️</button>
         </div>
         <div id="saved"></div>
       </div>
@@ -162,12 +171,21 @@
           if (e.code === "Enter") {
             say(txt.value);
           }
-          console.log(e);
         });
 
         txt.addEventListener("beforeinput", (e) => {
           if (e.data != null) {
             say(e.data);
+          }
+        });
+
+        txt.addEventListener("input", (e) => {
+          if (txt.value) {
+            btnSave.disabled = false;
+            btnSpeak.disabled = false;
+          } else {
+            btnSave.disabled = true;
+            btnSpeak.disabled = true;
           }
         });
 
@@ -197,7 +215,7 @@
         var say = (text) => {
           let u = new SpeechSynthesisUtterance();
           u.voice = window.speechSynthesis.getVoices().find((v) => v.voiceURI === "Alva");
-          u.lang = "sv-SE";
+          // u.lang = "sv-SE";
           u.text = text.toLowerCase();
           speechSynthesis.cancel();
           speechSynthesis.speak(u);
