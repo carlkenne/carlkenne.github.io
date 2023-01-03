@@ -213,7 +213,11 @@
         <div id="saved"></div>
       </div>
     </div>
-    <script>
+    <script type="module">
+      import easySpeech from "https://cdn.skypack.dev/easy-speech";
+
+      easySpeech.detect();
+
       window.addEventListener("DOMContentLoaded", () => {
         var synth = window.speechSynthesis;
         let btnSpeak = document.querySelector("#speak");
@@ -221,6 +225,11 @@
         let txt = document.querySelector("#text");
         let saved = document.querySelector("#saved");
         let words = [];
+
+        easySpeech
+          .init({ maxTimeout: 5000, interval: 250 })
+          .then(() => console.debug("load complete"))
+          .catch((e) => console.error(e));
 
         document.body.addEventListener("click", (event) => {
           changeColor(event.target);
@@ -293,12 +302,22 @@
         };
 
         var say = (text) => {
-          let u = new SpeechSynthesisUtterance();
-          u.voice = window.speechSynthesis.getVoices().find((v) => v.voiceURI === "Alva");
-          // u.lang = "sv-SE";
-          u.text = text.toLowerCase();
-          speechSynthesis.cancel();
-          speechSynthesis.speak(u);
+          easySpeech.speak({
+            text: text.toLowerCase(),
+          });
+          // let u = new SpeechSynthesisUtterance();
+          // var userLang = navigator.language || navigator.userLanguage;
+
+          // const voices = window.speechSynthesis.getVoices();
+          // let voice = voices.find((v) => v.voiceURI === "Alva");
+          // if (!voice) {
+          //   voice = voices.find((v) => v.voiceURI === "Alva");
+          // }
+
+          // u.voice = voice;
+          // u.text = text.toLowerCase();
+          // speechSynthesis.cancel();
+          // speechSynthesis.speak(u);
         };
       });
     </script>
