@@ -230,6 +230,7 @@
         easySpeech
           .init({ maxTimeout: 5000, interval: 250 })
           .then(() => {
+            errors.innerHTML += navigator.language;
             errors.innerHTML += easySpeech.voices().map((v) => " " + v.lang + "-" + v.default);
             console.log(easySpeech.voices());
           })
