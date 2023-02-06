@@ -210,6 +210,7 @@
           <button id="speak" class="btn btn-primary" disabled>👄</button>
           <button id="save" class="btn btn-primary" disabled>⤵️</button>
         </div>
+        <div id="errors"></div>
         <div id="saved"></div>
       </div>
     </div>
@@ -217,19 +218,24 @@
       import easySpeech from "https://cdn.skypack.dev/easy-speech";
 
       easySpeech.detect();
-
       window.addEventListener("DOMContentLoaded", () => {
         var synth = window.speechSynthesis;
         let btnSpeak = document.querySelector("#speak");
         let btnSave = document.querySelector("#save");
         let txt = document.querySelector("#text");
         let saved = document.querySelector("#saved");
+        let errors = document.querySelector("#errors");
         let words = [];
 
         easySpeech
           .init({ maxTimeout: 5000, interval: 250 })
-          .then(() => console.debug("load complete"))
-          .catch((e) => console.error(e));
+          .then(() => {
+            errors.innerHTML += easySpeech.voices().map((v) => " " + v.lang + "-" + v.default);
+            console.log(easySpeech.voices());
+          })
+          .catch((e) => {
+            errors.innerHTML += e;
+          });
 
         document.body.addEventListener("click", (event) => {
           changeColor(event.target);
@@ -305,6 +311,7 @@
           easySpeech.speak({
             text: text.toLowerCase(),
           });
+
           // let u = new SpeechSynthesisUtterance();
           // var userLang = navigator.language || navigator.userLanguage;
 
