@@ -226,11 +226,26 @@
         let saved = document.querySelector("#saved");
         let errors = document.querySelector("#errors");
         let words = [];
+        let preferredLanguage = undefined;
 
         easySpeech
           .init({ maxTimeout: 5000, interval: 250 })
           .then(() => {
-            errors.innerHTML += navigator.language;
+            const defaults = easySpeech.voices().filter((x) => x.default);
+            if (defaults.lenght == 1) {
+              preferredLanguage = defaults[0];
+            }
+            if (!preferredLanguage && defaults.length > 1) {
+              preferredLanguage = defaults.filter((d) => d.lang.contains(navigator.language))[0];
+              if (!preferredLanguage) {
+                preferredLanguage = defaults[0];
+              }
+            }
+            if (!preferredLanguage) {
+              preferredLanguage = easySpeech.voices().filter((d) => d.lang.contains(navigator.language))[0];
+            }
+            errors.innerHTML += `prefered: ${preferredLanguage.lang}, `;
+            errors.innerHTML += `nav: ${navigator.language}, `;
             errors.innerHTML += easySpeech.voices().map((v) => " " + v.lang + "-" + v.default);
             console.log(easySpeech.voices());
           })
@@ -241,6 +256,7 @@
         document.body.addEventListener("click", (event) => {
           changeColor(event.target);
         });
+
         document.body.addEventListener("touchstart", (event) => {
           changeColor(event.target);
         });
@@ -311,6 +327,7 @@
         var say = (text) => {
           easySpeech.speak({
             text: text.toLowerCase(),
+            voice: preferredLanguage,
           });
 
           // let u = new SpeechSynthesisUtterance();
