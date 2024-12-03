@@ -232,22 +232,30 @@
           .init({ maxTimeout: 5000, interval: 250 })
           .then(() => {
             const defaults = easySpeech.voices().filter((x) => x.default);
-            if (defaults.lenght == 1) {
+            if (defaults.length == 1) {
               preferredLanguage = defaults[0];
             }
             if (!preferredLanguage && defaults.length > 1) {
-              preferredLanguage = defaults.filter((d) => d.lang.contains(navigator.language))[0];
+              // First try exact match
+              preferredLanguage = defaults.find((d) => d.lang === navigator.language);
+
+              // Then try partial match (e.g. 'en' matches 'en-US')
+              if (!preferredLanguage) {
+                preferredLanguage = defaults.find((d) => d.lang.startsWith(navigator.language.split("-")[0]));
+              }
+
+              // Fallback to first default voice if no match
               if (!preferredLanguage) {
                 preferredLanguage = defaults[0];
               }
             }
             if (!preferredLanguage) {
-              preferredLanguage = easySpeech.voices().filter((d) => d.lang.contains(navigator.language))[0];
+              preferredLanguage = easySpeech.voices().filter((d) => d.lang.includes(navigator.language))[0];
             }
             errors.innerHTML += `prefered: ${preferredLanguage.lang}, `;
             errors.innerHTML += `nav: ${navigator.language}, `;
             errors.innerHTML += easySpeech.voices().map((v) => " " + v.lang + "-" + v.default);
-            console.log(easySpeech.voices());
+            // console.log(easySpeech.voices());
           })
           .catch((e) => {
             errors.innerHTML += e;
